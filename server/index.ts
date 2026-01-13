@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
+import rateLimit from "express-rate-limit";
 
 // API 라우트
 import overviewRouter from "./routes/overview.js";
@@ -16,8 +17,20 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  // JSON 파싱 미들웨어
   app.use(express.json());
+
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: {
+      error: "Too many requests",
+      message: "Rate limit exceeded. Please try again later.",
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  app.use("/api/", limiter);
 
   // DB 연결 테스트 (환경변수가 설정된 경우에만)
   if (process.env.DB_HOST) {
