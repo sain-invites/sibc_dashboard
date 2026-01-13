@@ -11,6 +11,13 @@
 
 import { Router, Request, Response } from "express";
 import { queryMany, queryOne } from "../db.js";
+import {
+  DateParamSchema,
+  PaginationParamsSchema,
+  SearchQuerySchema,
+  SortParamsSchema,
+  UserIdSchema,
+} from "../lib/validators.js";
 
 const router = Router();
 
@@ -217,24 +224,78 @@ function buildOrderBy(sortKeyParam: unknown, sortOrderParam: unknown): string {
 
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const { start, end, q, page = "1", limit = "20", sort, order } = req.query;
+    const { start, end, q, page, limit, sort, order } = req.query;
 
-    // 기본값: 최근 30일
+    const endValidation = DateParamSchema.safeParse(end);
+    if (!endValidation.success) {
+      res.status(400).json({
+        error: "Invalid parameter",
+        message: endValidation.error.issues[0].message,
+        field: "end",
+      });
+      return;
+    }
+
+    const startValidation = DateParamSchema.safeParse(start);
+    if (start && !startValidation.success) {
+      res.status(400).json({
+        error: "Invalid parameter",
+        message: startValidation.error.issues[0].message,
+        field: "start",
+      });
+      return;
+    }
+
+    const paginationValidation = PaginationParamsSchema.safeParse({
+      page,
+      limit,
+    });
+    if (!paginationValidation.success) {
+      res.status(400).json({
+        error: "Invalid parameter",
+        message: paginationValidation.error.issues[0].message,
+        field: paginationValidation.error.issues[0].path.join("."),
+      });
+      return;
+    }
+
+    const searchValidation = SearchQuerySchema.safeParse(q);
+    if (q && !searchValidation.success) {
+      res.status(400).json({
+        error: "Invalid parameter",
+        message: searchValidation.error.issues[0].message,
+        field: "q",
+      });
+      return;
+    }
+
+    const sortValidation = SortParamsSchema.safeParse({ sort, order });
+    if ((sort || order) && !sortValidation.success) {
+      res.status(400).json({
+        error: "Invalid parameter",
+        message: sortValidation.error.issues[0].message,
+        field: sortValidation.error.issues[0].path.join("."),
+      });
+      return;
+    }
+
     const endStr = parseDateParam(end) ?? formatDateKST(new Date());
     const endDate = dateFromKstString(endStr);
     const startStr =
       parseDateParam(start) ??
       formatDateKST(new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000));
 
-    const pageNum = Math.max(1, parseInt(page as string) || 1);
-    const limitNum = Math.min(
-      100,
-      Math.max(1, parseInt(limit as string) || 20),
-    );
+    const pageNum = paginationValidation.data.page;
+    const limitNum = paginationValidation.data.limit;
     const offset = (pageNum - 1) * limitNum;
 
-    const searchQuery = q ? `%${q}%` : "";
-    const orderBy = buildOrderBy(sort, order);
+    const searchQuery = searchValidation.data
+      ? `%${searchValidation.data}%`
+      : "";
+    const orderBy = buildOrderBy(
+      sortValidation.data?.sort,
+      sortValidation.data?.order,
+    );
     const userListQuery = `${SQL.userList} ORDER BY ${orderBy} LIMIT $4 OFFSET $5`;
 
     // 병렬 쿼리 실행

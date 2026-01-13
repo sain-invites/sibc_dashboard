@@ -11,6 +11,7 @@
 
 import { Router, Request, Response } from "express";
 import { queryMany, queryOne } from "../db.js";
+import { DateParamSchema } from "../lib/validators.js";
 
 const router = Router();
 
@@ -434,7 +435,26 @@ router.get("/", async (req: Request, res: Response) => {
   try {
     const { start, end } = req.query;
 
-    // 기본값: 최근 30일
+    const endValidation = DateParamSchema.safeParse(end);
+    if (!endValidation.success) {
+      res.status(400).json({
+        error: "Invalid parameter",
+        message: endValidation.error.issues[0].message,
+        field: "end",
+      });
+      return;
+    }
+
+    const startValidation = DateParamSchema.safeParse(start);
+    if (start && !startValidation.success) {
+      res.status(400).json({
+        error: "Invalid parameter",
+        message: startValidation.error.issues[0].message,
+        field: "start",
+      });
+      return;
+    }
+
     const endStr = parseDateParam(end) ?? formatDateKST(new Date());
     const endDate = dateFromKstString(endStr);
     const startStr =
