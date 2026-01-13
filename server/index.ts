@@ -20,11 +20,6 @@ async function startServer() {
 
   app.use(express.json());
 
-  const cache = new NodeCache({
-    stdTTL: 300,
-    checkperiod: 600,
-  });
-
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
@@ -38,39 +33,9 @@ async function startServer() {
 
   app.use("/api/", limiter);
 
-  function generateCacheKey(req: express.Request): string {
-    return `${req.url}:${JSON.stringify(req.query)}`;
-  }
-
-  function cacheMiddleware(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ) {
-    if (req.method !== "GET") {
-      return next();
-    }
-
-    const key = generateCacheKey(req);
-    const cached = cache.get(key);
-
-    if (cached) {
-      res.setHeader("X-Cache", "HIT");
-      return res.json(cached);
-    }
-
-    res.setHeader("X-Cache", "MISS");
-    const originalJson = res.json.bind(res);
-
-    res.json = (body: unknown) => {
-      const response = originalJson(body);
-      cache.set(key, response, 300);
-    };
-
-    next();
-  }
-
-  app.use("/api/overview", cacheMiddleware);
+  app.use("/api/overview", overviewRouter);
+  app.use("/api/users", usersRouter);
+  app.use("/api/user360", user360Router);
 
   // API 라우트 마운트
   app.use("/api/overview", overviewRouter);
