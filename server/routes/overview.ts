@@ -15,9 +15,7 @@ import { DateParamSchema } from "../lib/validators.js";
 
 const router = Router();
 
-// ============================================
-// 타입 정의
-// ============================================
+// Type definitions
 
 interface KPI {
   id: string;
@@ -72,9 +70,8 @@ interface OverviewResponse {
   };
 }
 
-// ============================================
-// SQL 쿼리 (리뷰 반영)
-// ============================================
+// SQL queries (review changes)
+// ==========================
 
 const SQL = {
   // 총 사용자 수
