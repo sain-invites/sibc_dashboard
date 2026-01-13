@@ -1,8 +1,9 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import rateLimit from "express-rate-limit";
+import NodeCache from "node-cache";
 
 // API 라우트
 import overviewRouter from "./routes/overview.js";
@@ -19,6 +20,11 @@ async function startServer() {
 
   app.use(express.json());
 
+  const cache = new NodeCache({
+    stdTTL: 300,
+    checkperiod: 600,
+  });
+
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
@@ -32,19 +38,39 @@ async function startServer() {
 
   app.use("/api/", limiter);
 
-  // DB 연결 테스트 (환경변수가 설정된 경우에만)
-  if (process.env.DB_HOST) {
-    const dbConnected = await testConnection();
-    if (dbConnected) {
-      console.log("Database connected successfully");
-    } else {
-      console.warn(
-        "Database connection failed - API routes will return errors",
-      );
-    }
-  } else {
-    console.log("DB_HOST not set - running in static mode (CSV fallback)");
+  function generateCacheKey(req: express.Request): string {
+    return `${req.url}:${JSON.stringify(req.query)}`;
   }
+
+  function cacheMiddleware(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) {
+    if (req.method !== "GET") {
+      return next();
+    }
+
+    const key = generateCacheKey(req);
+    const cached = cache.get(key);
+
+    if (cached) {
+      res.setHeader("X-Cache", "HIT");
+      return res.json(cached);
+    }
+
+    res.setHeader("X-Cache", "MISS");
+    const originalJson = res.json.bind(res);
+
+    res.json = (body: unknown) => {
+      const response = originalJson(body);
+      cache.set(key, response, 300);
+    };
+
+    next();
+  }
+
+  app.use("/api/overview", cacheMiddleware);
 
   // API 라우트 마운트
   app.use("/api/overview", overviewRouter);
