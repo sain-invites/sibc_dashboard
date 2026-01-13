@@ -1,0 +1,323 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* 
+ * Command Center Theme
+ * NASA 미션 컨트롤 / 지휘 센터 스타일
+ * 다크 모드 기반, 높은 정보 밀도, 상태별 색상 코딩
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  
+  /* Custom status colors */
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  
+  /* Font family */
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+}
+
+:root {
+  /* Command Center Dark Theme - GitHub Dark 스타일 */
+  --radius: 0.5rem;
+  
+  /* Base colors */
+  --background: #0D1117;
+  --foreground: #C9D1D9;
+  
+  /* Card/Panel */
+  --card: #161B22;
+  --card-foreground: #C9D1D9;
+  
+  /* Popover */
+  --popover: #1C2128;
+  --popover-foreground: #C9D1D9;
+  
+  /* Primary - Blue accent */
+  --primary: #58A6FF;
+  --primary-foreground: #0D1117;
+  
+  /* Secondary */
+  --secondary: #21262D;
+  --secondary-foreground: #C9D1D9;
+  
+  /* Muted */
+  --muted: #21262D;
+  --muted-foreground: #8B949E;
+  
+  /* Accent */
+  --accent: #1F6FEB;
+  --accent-foreground: #FFFFFF;
+  
+  /* Destructive */
+  --destructive: #F85149;
+  --destructive-foreground: #FFFFFF;
+  
+  /* Border/Input */
+  --border: #30363D;
+  --input: #21262D;
+  --ring: #58A6FF;
+  
+  /* Status colors */
+  --success: #3FB950;
+  --warning: #D29922;
+  --danger: #F85149;
+  
+  /* Chart colors - 데이터 시각화용 */
+  --chart-1: #58A6FF;
+  --chart-2: #3FB950;
+  --chart-3: #D29922;
+  --chart-4: #A371F7;
+  --chart-5: #F85149;
+  
+  /* Sidebar */
+  --sidebar: #0D1117;
+  --sidebar-foreground: #C9D1D9;
+  --sidebar-primary: #58A6FF;
+  --sidebar-primary-foreground: #0D1117;
+  --sidebar-accent: #21262D;
+  --sidebar-accent-foreground: #C9D1D9;
+  --sidebar-border: #30363D;
+  --sidebar-ring: #58A6FF;
+}
+
+/* Light theme override (기본은 다크이므로 거의 사용 안 함) */
+.light {
+  --background: #FFFFFF;
+  --foreground: #24292F;
+  --card: #F6F8FA;
+  --card-foreground: #24292F;
+  --popover: #FFFFFF;
+  --popover-foreground: #24292F;
+  --primary: #0969DA;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F6F8FA;
+  --secondary-foreground: #24292F;
+  --muted: #F6F8FA;
+  --muted-foreground: #57606A;
+  --accent: #0969DA;
+  --accent-foreground: #FFFFFF;
+  --destructive: #CF222E;
+  --destructive-foreground: #FFFFFF;
+  --border: #D0D7DE;
+  --input: #F6F8FA;
+  --ring: #0969DA;
+  --success: #1A7F37;
+  --warning: #9A6700;
+  --danger: #CF222E;
+  --chart-1: #0969DA;
+  --chart-2: #1A7F37;
+  --chart-3: #9A6700;
+  --chart-4: #8250DF;
+  --chart-5: #CF222E;
+  --sidebar: #F6F8FA;
+  --sidebar-foreground: #24292F;
+  --sidebar-primary: #0969DA;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EAEEF2;
+  --sidebar-accent-foreground: #24292F;
+  --sidebar-border: #D0D7DE;
+  --sidebar-ring: #0969DA;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1920px;
+    }
+  }
+  
+  /* Command Center 전용 컴포넌트 스타일 */
+  
+  /* KPI 카드 */
+  .kpi-card {
+    @apply bg-card border border-border rounded-lg p-4 transition-all duration-200;
+  }
+  
+  .kpi-card:hover {
+    @apply border-primary/50;
+  }
+  
+  /* 상태 인디케이터 */
+  .status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+  
+  .status-dot.success {
+    background-color: var(--success);
+    box-shadow: 0 0 8px var(--success);
+  }
+  
+  .status-dot.warning {
+    background-color: var(--warning);
+    box-shadow: 0 0 8px var(--warning);
+  }
+  
+  .status-dot.danger {
+    background-color: var(--danger);
+    box-shadow: 0 0 8px var(--danger);
+  }
+  
+  /* 실시간 펄스 애니메이션 */
+  .pulse-live {
+    animation: pulse-live 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-live {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  /* 패널 스타일 */
+  .panel {
+    @apply bg-card border border-border rounded-lg;
+  }
+  
+  .panel-header {
+    @apply px-4 py-3 border-b border-border flex items-center justify-between;
+  }
+  
+  .panel-body {
+    @apply p-4;
+  }
+  
+  /* 숫자 카운트업 애니메이션용 */
+  .number-display {
+    font-variant-numeric: tabular-nums;
+  }
+  
+  /* 스파크라인 컨테이너 */
+  .sparkline-container {
+    @apply h-8 w-full;
+  }
+  
+  /* 스크롤바 커스텀 */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground);
+  }
+}
+
+@layer utilities {
+  /* 텍스트 그라데이션 */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+  
+  /* 글로우 효과 */
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+  }
+  
+  .glow-success {
+    box-shadow: 0 0 20px rgba(63, 185, 80, 0.3);
+  }
+  
+  .glow-warning {
+    box-shadow: 0 0 20px rgba(210, 153, 34, 0.3);
+  }
+  
+  .glow-danger {
+    box-shadow: 0 0 20px rgba(248, 81, 73, 0.3);
+  }
+}
