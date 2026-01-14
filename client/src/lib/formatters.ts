@@ -64,14 +64,11 @@ function normalizeDateInput(iso: string): string {
   return trimmed;
 }
 
-export function formatDateTimeKST(
-  iso: string | null | undefined,
-  withSeconds: boolean = false,
-): string {
-  if (!iso) return "-";
+function getDatePartsKST(iso: string | null | undefined) {
+  if (!iso) return null;
   const normalized = normalizeDateInput(iso);
   const d = new Date(normalized);
-  if (Number.isNaN(d.getTime())) return "-";
+  if (Number.isNaN(d.getTime())) return null;
 
   const parts = new Intl.DateTimeFormat("ko-KR", {
     timeZone: "Asia/Seoul",
@@ -80,19 +77,41 @@ export function formatDateTimeKST(
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    second: withSeconds ? "2-digit" : undefined,
+    second: "2-digit",
     hour12: false,
   }).formatToParts(d);
 
   const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
-  const yyyy = get("year");
-  const mm = get("month");
-  const dd = get("day");
-  const hh = get("hour");
-  const mi = get("minute");
-  const ss = get("second");
+  return {
+    yyyy: get("year"),
+    mm: get("month"),
+    dd: get("day"),
+    hh: get("hour"),
+    mi: get("minute"),
+    ss: get("second"),
+  };
+}
+
+export function formatDateKST(iso: string | null | undefined): string {
+  const parts = getDatePartsKST(iso);
+  if (!parts) return "-";
+  return `${parts.yyyy}-${parts.mm}-${parts.dd}`;
+}
+
+export function formatMonthDayKST(iso: string | null | undefined): string {
+  const parts = getDatePartsKST(iso);
+  if (!parts) return "-";
+  return `${parts.mm}/${parts.dd}`;
+}
+
+export function formatDateTimeKST(
+  iso: string | null | undefined,
+  withSeconds: boolean = false,
+): string {
+  const parts = getDatePartsKST(iso);
+  if (!parts) return "-";
 
   return withSeconds
-    ? `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`
-    : `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+    ? `${parts.yyyy}-${parts.mm}-${parts.dd} ${parts.hh}:${parts.mi}:${parts.ss}`
+    : `${parts.yyyy}-${parts.mm}-${parts.dd} ${parts.hh}:${parts.mi}`;
 }

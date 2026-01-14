@@ -74,6 +74,10 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
     return () => window.clearTimeout(timerId);
   }, [searchQuery]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [startDate, endDate]);
+
   const { data, loading, error } = useUsersAPI(startDate, endDate, {
     query: debouncedQuery || undefined,
     page: currentPage,
@@ -310,12 +314,12 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
                           variant="outline"
                           className={cn(
                             "text-xs",
-                            row.completionRate >= 70 &&
+                            completionPct >= 70 &&
                               "border-[#3FB950] text-[#3FB950]",
-                            row.completionRate >= 30 &&
-                              row.completionRate < 70 &&
+                            completionPct >= 30 &&
+                              completionPct < 70 &&
                               "border-[#D29922] text-[#D29922]",
-                            row.completionRate < 30 &&
+                            completionPct < 30 &&
                               "border-[#F85149] text-[#F85149]",
                           )}
                         >

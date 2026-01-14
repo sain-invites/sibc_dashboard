@@ -54,11 +54,19 @@ export default function Home() {
   const latestTrends = useMemo(() => {
     if (!overview) return null;
 
-    type TrendMetric = { value: number };
-    const getLastValue = (arr: TrendMetric[]) =>
-      arr.length > 0 ? arr[arr.length - 1].value : 0;
-    const getPrevValue = (arr: TrendMetric[]) =>
-      arr.length > 1 ? arr[arr.length - 2].value : 0;
+    type TrendMetric = { value: number; date: string };
+    const getSortedByDate = (arr: TrendMetric[]) =>
+      [...arr].sort((a, b) => a.date.localeCompare(b.date));
+    const getLastValue = (arr: TrendMetric[]) => {
+      if (arr.length === 0) return 0;
+      const sorted = getSortedByDate(arr);
+      return sorted[sorted.length - 1]?.value ?? 0;
+    };
+    const getPrevValue = (arr: TrendMetric[]) => {
+      if (arr.length < 2) return 0;
+      const sorted = getSortedByDate(arr);
+      return sorted[sorted.length - 2]?.value ?? 0;
+    };
     const calcTrend = (curr: number, prev: number) =>
       prev ? ((curr - prev) / prev) * 100 : 0;
 

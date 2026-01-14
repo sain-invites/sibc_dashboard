@@ -18,8 +18,10 @@ import {
 } from "@/hooks/useAPI";
 import {
   formatCurrencyUSD,
+  formatDateKST,
   formatDateTimeKST,
   formatInteger,
+  formatMonthDayKST,
   formatMs,
   formatPercent,
 } from "@/lib/formatters";
@@ -91,23 +93,14 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const formatDateOnly = (value: string | null | undefined) => {
-  const text = formatDateTimeKST(value, false);
-  if (text === "-") return "-";
-  return text.split(" ")[0] ?? "-";
-};
+const formatDateOnly = (value: string | null | undefined) =>
+  formatDateKST(value);
 
 const formatDateTimeMinute = (value: string | null | undefined) =>
   formatDateTimeKST(value, false);
 
-const formatMonthDay = (value: string | null | undefined) => {
-  const text = formatDateTimeKST(value, false);
-  if (text === "-") return "-";
-  const datePart = text.split(" ")[0] ?? "";
-  return datePart.length >= 10
-    ? `${datePart.slice(5, 7)}/${datePart.slice(8, 10)}`
-    : datePart;
-};
+const formatMonthDay = (value: string | null | undefined) =>
+  formatMonthDayKST(value);
 
 // ============================================
 // 요약 탭
@@ -593,11 +586,17 @@ function CommunicationTab({ data }: { data: User360Data }) {
 
   const formatJson = (value: string | null | undefined) => {
     if (!value) return "-";
+    const limit = 4000;
     try {
       const parsed = JSON.parse(value);
-      return JSON.stringify(parsed, null, 2);
+      const text = JSON.stringify(parsed, null, 2);
+      return text.length > limit
+        ? `${text.slice(0, limit)}\n... (truncated)`
+        : text;
     } catch {
-      return value;
+      return value.length > limit
+        ? `${value.slice(0, limit)}\n... (truncated)`
+        : value;
     }
   };
 
@@ -1166,6 +1165,9 @@ export default function User360() {
   const [activeTab, setActiveTab] = useState<
     "summary" | "routine" | "communication" | "operations"
   >("summary");
+  const [selectedUserLabel, setSelectedUserLabel] = useState<string | null>(
+    null,
+  );
 
   const [dateRange, setDateRange] = useState({
     start: subDays(new Date(), 29),
@@ -1198,7 +1200,8 @@ export default function User360() {
   });
 
   const userList = usersData?.users ?? [];
-  const filteredUsers = userList;
+  const hasSearchQuery = debouncedQuery.trim().length > 0;
+  const filteredUsers = hasSearchQuery ? userList : [];
 
   const {
     data: user360Data,
@@ -1213,8 +1216,15 @@ export default function User360() {
     }
   }, [user360Loading, user360Data]);
 
-  const handleUserSelect = (userId: string) => {
+  useEffect(() => {
+    if (user360Data?.summary.userName) {
+      setSelectedUserLabel(user360Data.summary.userName);
+    }
+  }, [user360Data]);
+
+  const handleUserSelect = (userId: string, userName?: string) => {
     setSelectedUserId(userId);
+    setSelectedUserLabel(userName ?? null);
     setSearchOpen(false);
     setActiveTab("summary");
     setLocation(`/user/${userId}`);
@@ -1251,6 +1261,7 @@ export default function User360() {
   }
 
   const selectedUserName =
+    selectedUserLabel ||
     user360Data?.summary.userName ||
     userList.find((u) => u.userId === selectedUserId)?.userName ||
     (selectedUserId ? selectedUserId.slice(0, 8) + "..." : "사용자 선택");
@@ -1285,7 +1296,7 @@ export default function User360() {
             </div>
             <div>
               <h1 className="text-base font-semibold text-foreground">
-                사용자 360
+                User 360
               </h1>
               <p className="text-xs text-muted-foreground">User Drilldown</p>
             </div>
@@ -1338,7 +1349,11 @@ export default function User360() {
                     onValueChange={setSearchQuery}
                   />
                   <CommandList>
-                    <CommandEmpty>사용자를 찾을 수 없습니다</CommandEmpty>
+                    <CommandEmpty>
+                      {hasSearchQuery
+                        ? "사용자를 찾을 수 없습니다"
+                        : "검색어를 입력하세요"}
+                    </CommandEmpty>
                     <CommandGroup>
                       <ScrollArea className="h-64">
                         {usersLoading && (
@@ -1350,7 +1365,9 @@ export default function User360() {
                           <CommandItem
                             key={user.userId}
                             value={`${user.userName} ${user.userId}`}
-                            onSelect={() => handleUserSelect(user.userId)}
+                            onSelect={() =>
+                              handleUserSelect(user.userId, user.userName)
+                            }
                           >
                             <User className="w-4 h-4 mr-2" />
                             <span className="truncate">{user.userName}</span>
