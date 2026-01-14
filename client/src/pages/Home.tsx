@@ -25,6 +25,8 @@ import {
   DollarSign,
   CheckCircle,
   Book,
+  TrendingUp,
+  TrendingDown,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -400,11 +402,14 @@ export default function Home() {
               lastUpdated={lastUpdated}
             />
 
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-card border border-border">
+            <div
+              className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-card border border-border hover:border-primary/20 transition-colors"
+              title="System Health Status"
+            >
               <div
                 className={`w-2 h-2 rounded-full ${
                   health.status === "ok"
-                    ? "bg-[#3FB950] pulse-live"
+                    ? "bg-[#3FB950] ring-4 ring-[#3FB950]/20"
                     : "bg-[#F85149]"
                 }`}
               />
@@ -466,7 +471,7 @@ export default function Home() {
                     </div>
                     <span
                       className={cn(
-                        "text-xs font-medium px-1.5 py-0.5 rounded",
+                        "flex items-center gap-1 text-xs font-medium px-1.5 py-0.5 rounded",
                         item.trend > 0
                           ? "text-green-500 bg-green-500/10"
                           : item.trend < 0
@@ -474,6 +479,11 @@ export default function Home() {
                             : "text-muted-foreground bg-muted/10",
                       )}
                     >
+                      {item.trend > 0 ? (
+                        <TrendingUp className="w-3 h-3" />
+                      ) : item.trend < 0 ? (
+                        <TrendingDown className="w-3 h-3" />
+                      ) : null}
                       {item.trend > 0 ? "+" : ""}
                       {item.trend.toFixed(1)}%
                     </span>

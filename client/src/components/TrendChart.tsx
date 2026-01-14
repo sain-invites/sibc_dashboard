@@ -23,6 +23,8 @@ import {
   formatPercent,
 } from "@/lib/formatters";
 
+import { BarChart2 } from "lucide-react";
+
 interface TrendChartProps {
   data: TrendChartData;
   height?: number;
@@ -104,10 +106,15 @@ export function TrendChart({
           <h3 className="text-sm font-medium text-foreground">{data.title}</h3>
         </div>
         <div
-          className="panel-body flex items-center justify-center"
+          className="panel-body flex flex-col items-center justify-center gap-3"
           style={{ height }}
         >
-          <p className="text-sm text-muted-foreground">데이터가 없습니다</p>
+          <div className="p-3 rounded-full bg-muted/30">
+            <BarChart2 className="w-6 h-6 text-muted-foreground/50" />
+          </div>
+          <p className="text-sm text-muted-foreground font-medium">
+            데이터가 없습니다
+          </p>
         </div>
       </div>
     );

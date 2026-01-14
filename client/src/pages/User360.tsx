@@ -409,25 +409,25 @@ function RoutineTab({ data }: { data: User360Data }) {
           {data.routine.currentWeekPlan ? (
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <div className="text-center p-3 bg-muted/30 rounded-lg border border-transparent hover:border-border transition-all">
                   <p className="text-2xl font-bold text-[#58A6FF]">
                     {totalGoals}
                   </p>
                   <p className="text-xs text-muted-foreground">총 목표</p>
                 </div>
-                <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <div className="text-center p-3 bg-muted/30 rounded-lg border border-transparent hover:border-border transition-all">
                   <p className="text-2xl font-bold text-[#3FB950]">
                     {completedGoals}
                   </p>
                   <p className="text-xs text-muted-foreground">수행</p>
                 </div>
-                <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <div className="text-center p-3 bg-muted/30 rounded-lg border border-transparent hover:border-border transition-all">
                   <p className="text-2xl font-bold text-[#D29922]">
                     {inProgressGoals}
                   </p>
                   <p className="text-xs text-muted-foreground">진행 중</p>
                 </div>
-                <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <div className="text-center p-3 bg-muted/30 rounded-lg border border-transparent hover:border-border transition-all">
                   <p className="text-2xl font-bold text-[#A371F7]">
                     {overallCompletionRateText}
                   </p>
@@ -1322,11 +1322,14 @@ export default function User360() {
               }}
               lastUpdated={lastUpdated}
             />
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-card border border-border">
+            <div
+              className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-card border border-border hover:border-primary/20 transition-colors"
+              title="System Health Status"
+            >
               <div
                 className={`w-2 h-2 rounded-full ${
                   health.status === "ok"
-                    ? "bg-[#3FB950] pulse-live"
+                    ? "bg-[#3FB950] ring-4 ring-[#3FB950]/20"
                     : "bg-[#F85149]"
                 }`}
               />

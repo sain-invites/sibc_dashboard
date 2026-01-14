@@ -450,7 +450,7 @@ export default function ComponentGuide() {
             <Card className="bg-card border-border">
               <CardContent className="p-0">
                 <Table>
-                  <TableHeader>
+                  <TableHeader className="sticky top-0 bg-card z-10 shadow-sm">
                     <TableRow className="hover:bg-transparent">
                       <TableHead className="w-[200px]">Table</TableHead>
                       <TableHead>Description</TableHead>
@@ -513,7 +513,7 @@ function SectionCard({ doc }: { doc: (typeof OVERVIEW_DOCS)[number] }) {
             <AccordionContent>
               <div className="rounded-md border border-border bg-muted/20">
                 <Table>
-                  <TableHeader>
+                  <TableHeader className="sticky top-0 bg-muted/20 z-10">
                     <TableRow className="hover:bg-transparent border-border">
                       <TableHead className="w-[180px]">지표</TableHead>
                       <TableHead className="w-[200px]">Table/Column</TableHead>
