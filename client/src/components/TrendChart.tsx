@@ -101,7 +101,10 @@ export function TrendChart({
   // 데이터가 없을 때
   if (chartData.length === 0) {
     return (
-      <div className="panel h-full">
+      <div className="panel h-full" aria-describedby={`desc-${data.id}`}>
+        <div className="sr-only" id={`desc-${data.id}`}>
+          {data.title} 차트입니다. {data.description || ""}
+        </div>
         <div className="panel-header">
           <h3 className="text-sm font-medium text-foreground">{data.title}</h3>
         </div>
@@ -121,7 +124,10 @@ export function TrendChart({
   }
 
   return (
-    <div className="panel h-full">
+    <div className="panel h-full" aria-describedby={`desc-${data.id}`}>
+      <div className="sr-only" id={`desc-${data.id}`}>
+        {data.title} 차트입니다. {data.description || ""}
+      </div>
       <div className="panel-header">
         <h3 className="text-sm font-medium text-foreground">{data.title}</h3>
       </div>

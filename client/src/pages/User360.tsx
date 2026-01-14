@@ -42,6 +42,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { DateFilter } from "@/components/DateFilter";
 import {
   Dialog,
@@ -482,7 +487,9 @@ function RoutineTab({ data }: { data: User360Data }) {
 
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg">최근 14일 수행율 추이</CardTitle>
+          <CardTitle className="text-lg">
+            일별 수행율 추이 (선택 기간)
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {completionRateData.length > 0 ? (
@@ -644,7 +651,7 @@ function CommunicationTab({ data }: { data: User360Data }) {
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">최근 발송 메시지</CardTitle>
-          <CardDescription>최근 10건</CardDescription>
+          <CardDescription>최근 10건 (선택 기간 내)</CardDescription>
         </CardHeader>
         <CardContent>
           {data.communication.recentMessages.length > 0 ? (
@@ -723,7 +730,7 @@ function CommunicationTab({ data }: { data: User360Data }) {
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">최근 채팅 스레드</CardTitle>
-          <CardDescription>최근 10건</CardDescription>
+          <CardDescription>최근 10건 (선택 기간 내)</CardDescription>
         </CardHeader>
         <CardContent>
           {data.communication.chatThreads.length > 0 ? (
@@ -1083,7 +1090,7 @@ function OperationsTab({ data }: { data: User360Data }) {
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">최근 처리 실패</CardTitle>
-          <CardDescription>최근 10건</CardDescription>
+          <CardDescription>최근 10건 (선택 기간 내)</CardDescription>
         </CardHeader>
         <CardContent>
           {data.operations.recentFailures.length > 0 ? (
@@ -1330,16 +1337,26 @@ export default function User360() {
                 컴포넌트 가이드
               </Button>
             </Link>
-            <DateFilter
-              startDate={dateRange.start}
-              endDate={dateRange.end}
-              onDateChange={(start, end) => setDateRange({ start, end })}
-              onRefresh={() => {
-                refetch();
-                refetchUsers();
-              }}
-              lastUpdated={lastUpdated}
-            />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div>
+                  <DateFilter
+                    startDate={dateRange.start}
+                    endDate={dateRange.end}
+                    onDateChange={(start, end) => setDateRange({ start, end })}
+                    onRefresh={() => {
+                      refetch();
+                      refetchUsers();
+                    }}
+                    lastUpdated={lastUpdated}
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>모든 탭의 지표는 선택된 기간을 기준으로 필터링됩니다.</p>
+              </TooltipContent>
+            </Tooltip>
+
             <div
               className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-card border border-border hover:border-primary/20 transition-colors"
               title="System Health Status"

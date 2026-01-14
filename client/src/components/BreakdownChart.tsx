@@ -200,6 +200,9 @@ function TableView({ data }: { data: BreakdownChartData }) {
   return (
     <div className="overflow-auto max-h-[280px]">
       <table className="w-full text-sm">
+        <caption className="sr-only">
+          {data.title} 상세 데이터 테이블. {data.description || ""}
+        </caption>
         <thead className="sticky top-0 bg-muted/40 backdrop-blur-sm">
           <tr className="border-b border-border">
             <th className="text-left py-2 px-2 text-muted-foreground font-medium">
@@ -267,7 +270,10 @@ export function BreakdownChart({ data, height = 280 }: BreakdownChartProps) {
 
   if (data.data.length === 0) {
     return (
-      <div className="panel h-full">
+      <div className="panel h-full" aria-describedby={`desc-${data.id}`}>
+        <div className="sr-only" id={`desc-${data.id}`}>
+          {data.title} 차트입니다. {summaryText}. {data.description || ""}
+        </div>
         <div className="panel-header">
           <h3 className="text-sm font-medium text-foreground">{data.title}</h3>
           <span className="text-xs text-muted-foreground">{summaryText}</span>
@@ -319,7 +325,10 @@ export function BreakdownChart({ data, height = 280 }: BreakdownChartProps) {
   }
 
   return (
-    <div className="panel h-full">
+    <div className="panel h-full" aria-describedby={`desc-${data.id}`}>
+      <div className="sr-only" id={`desc-${data.id}`}>
+        {data.title} 차트입니다. {summaryText}. {data.description || ""}
+      </div>
       <div className="panel-header">
         <h3 className="text-sm font-medium text-foreground">{data.title}</h3>
         <span className="text-xs text-muted-foreground">{summaryText}</span>
