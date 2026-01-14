@@ -69,7 +69,7 @@ function CustomTooltip({
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="bg-popover border border-border rounded-md px-3 py-2 shadow-lg">
+    <div className="bg-popover/95 backdrop-blur-sm border border-border rounded-md px-3 py-2 shadow-xl">
       <p className="text-xs text-muted-foreground mb-1">{label}</p>
       <p className="text-sm font-medium text-foreground">
         {typeof payload[0].value === "number"

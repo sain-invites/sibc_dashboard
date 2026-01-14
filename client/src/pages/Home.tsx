@@ -535,9 +535,9 @@ export default function Home() {
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center gap-4">
               <span>데이터 소스: invites_loop (PostgreSQL)</span>
-              <span className="hidden sm:inline">|</span>
+              <span className="hidden sm:inline mx-2">·</span>
               <span>시간대: Asia/Seoul</span>
-              <span className="hidden sm:inline">|</span>
+              <span className="hidden sm:inline mx-2">·</span>
               <span>화폐 단위: USD</span>
             </div>
             <div className="flex items-center gap-2">

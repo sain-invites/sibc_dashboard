@@ -372,7 +372,11 @@ export default function ComponentGuide() {
             </h2>
             <Button
               variant={activeTab === "overview" ? "secondary" : "ghost"}
-              className="w-full justify-start gap-2"
+              className={cn(
+                "w-full justify-start gap-2 transition-all",
+                activeTab === "overview" &&
+                  "font-semibold border-l-2 border-primary rounded-l-none pl-3",
+              )}
               onClick={() => setActiveTab("overview")}
             >
               <Activity className="w-4 h-4" />
@@ -380,7 +384,11 @@ export default function ComponentGuide() {
             </Button>
             <Button
               variant={activeTab === "user360" ? "secondary" : "ghost"}
-              className="w-full justify-start gap-2"
+              className={cn(
+                "w-full justify-start gap-2 transition-all",
+                activeTab === "user360" &&
+                  "font-semibold border-l-2 border-primary rounded-l-none pl-3",
+              )}
               onClick={() => setActiveTab("user360")}
             >
               <User className="w-4 h-4" />

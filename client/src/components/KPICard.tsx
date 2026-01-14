@@ -203,7 +203,7 @@ export function KPICard({ data, compact = false, onClick }: KPICardProps) {
           onClick={onClick}
           className={cn(
             "kpi-card cursor-pointer transition-all duration-200",
-            "hover:scale-[1.02] hover:border-primary/50",
+            "hover:scale-[1.02] hover:border-primary/50 shadow-sm hover:shadow-md",
             colors.bg,
             colors.border,
           )}

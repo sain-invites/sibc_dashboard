@@ -1299,7 +1299,9 @@ export default function User360() {
               <h1 className="text-base font-semibold text-foreground">
                 User 360
               </h1>
-              <p className="text-xs text-muted-foreground">User Drilldown</p>
+              <p className="text-xs text-muted-foreground">
+                Individual User Analysis
+              </p>
             </div>
           </div>
 
