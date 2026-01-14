@@ -68,7 +68,12 @@ function MiniSparkline({ data, color }: { data: number[]; color: string }) {
     .join(" ");
 
   return (
-    <svg width={width} height={height} className="opacity-70">
+    <svg
+      width={width}
+      height={height}
+      className="opacity-70"
+      aria-hidden="true"
+    >
       <polyline
         fill="none"
         stroke={color}
@@ -200,6 +205,8 @@ export function KPICard({ data, compact = false, onClick }: KPICardProps) {
     <Tooltip>
       <TooltipTrigger asChild>
         <div
+          role="region"
+          aria-label={`${data.title}: ${data.formattedValue}`}
           onClick={onClick}
           className={cn(
             "kpi-card cursor-pointer transition-all duration-200",

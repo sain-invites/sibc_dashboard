@@ -443,7 +443,7 @@ export default function Home() {
               <div
                 key={item.title}
                 className={cn(
-                  "p-4 rounded-xl border bg-card/50 backdrop-blur-sm relative overflow-hidden group transition-all hover:scale-[1.02]",
+                  "p-4 rounded-xl border bg-card/50 backdrop-blur-sm relative overflow-hidden group transition-all duration-200 hover:scale-[1.02] hover:shadow-md",
                   item.border,
                 )}
               >

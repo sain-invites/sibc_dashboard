@@ -151,12 +151,12 @@ export function TrendChart({
               />
               <XAxis
                 dataKey="displayDate"
-                tick={{ fill: "#8B949E", fontSize: 10 }}
+                tick={{ fill: "#8B949E", fontSize: 11 }}
                 tickLine={false}
                 axisLine={{ stroke: "#30363D" }}
               />
               <YAxis
-                tick={{ fill: "#8B949E", fontSize: 10 }}
+                tick={{ fill: "#8B949E", fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
                 width={40}
@@ -196,12 +196,12 @@ export function TrendChart({
               />
               <XAxis
                 dataKey="displayDate"
-                tick={{ fill: "#8B949E", fontSize: 10 }}
+                tick={{ fill: "#8B949E", fontSize: 11 }}
                 tickLine={false}
                 axisLine={{ stroke: "#30363D" }}
               />
               <YAxis
-                tick={{ fill: "#8B949E", fontSize: 10 }}
+                tick={{ fill: "#8B949E", fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
                 width={40}

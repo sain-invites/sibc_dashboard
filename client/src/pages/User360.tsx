@@ -706,7 +706,7 @@ function CommunicationTab({ data }: { data: User360Data }) {
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <MessageSquare className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p>발송된 메시지가 없습니다</p>
+              <p>최근 발송된 메시지 내역이 없습니다</p>
             </div>
           )}
         </CardContent>
@@ -779,7 +779,7 @@ function CommunicationTab({ data }: { data: User360Data }) {
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <MessageSquare className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p>채팅 기록이 없습니다</p>
+              <p>진행된 대화 스레드가 없습니다</p>
             </div>
           )}
         </CardContent>
@@ -1106,7 +1106,9 @@ function OperationsTab({ data }: { data: User360Data }) {
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <Check className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p>최근 실패한 작업이 없습니다. 시스템이 안정적입니다.</p>
+              <p>
+                최근 실패한 작업이 없습니다. 시스템이 안정적으로 운영 중입니다.
+              </p>
             </div>
           )}
         </CardContent>

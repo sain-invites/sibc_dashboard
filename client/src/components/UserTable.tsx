@@ -130,7 +130,7 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
   ) => (
     <TableHead
       className={cn(
-        "bg-[#0D1117] text-muted-foreground",
+        "bg-muted/50 text-muted-foreground",
         align === "right" && "text-right",
       )}
     >
@@ -185,16 +185,16 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
             setSearchQuery(e.target.value);
             setCurrentPage(1);
           }}
-          className="pl-9 bg-[#161B22] border-[#30363D]"
+          className="pl-9 bg-background border-border"
         />
       </div>
 
-      <div className="rounded-md border border-[#30363D] overflow-hidden">
-        <div className="bg-[#0D1117]">
+      <div className="rounded-md border border-border overflow-hidden">
+        <div className="bg-muted/50">
           <Table className="table-fixed">
             {renderColGroup()}
             <TableHeader>
-              <TableRow className="border-[#30363D] hover:bg-transparent">
+              <TableRow className="border-border hover:bg-transparent">
                 {renderHeader("사용자", "userName", "left")}
                 {renderHeader(
                   "이벤트",
@@ -277,7 +277,7 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
                   return (
                     <TableRow
                       key={row.userId}
-                      className="border-[#30363D] cursor-pointer hover:bg-[#161B22]"
+                      className="border-border cursor-pointer hover:bg-muted/50"
                       onClick={() => setLocation(`/user/${row.userId}`)}
                     >
                       <TableCell>
