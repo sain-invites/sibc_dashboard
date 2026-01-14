@@ -42,7 +42,7 @@ const OVERVIEW_DOCS = [
     id: "kpi-cards",
     title: "KPI Cards (핵심 지표)",
     component: "KPICard.tsx",
-    description: "전체 사용자 현황과 서비스 건강도를 요약합니다.",
+    description: "전체 사용자 현황 및 서비스 건강도 요약",
     api: "GET /api/overview",
     items: [
       {
@@ -76,7 +76,7 @@ const OVERVIEW_DOCS = [
     id: "trend-charts",
     title: "Trend Charts (추이 분석)",
     component: "TrendChart.tsx",
-    description: "기간 내 지표 변화를 시계열로 보여줍니다.",
+    description: "기간별 주요 지표 추이 시각화",
     api: "GET /api/overview",
     items: [
       {
@@ -105,7 +105,7 @@ const OVERVIEW_DOCS = [
     id: "breakdown-charts",
     title: "Breakdown (상세 분석)",
     component: "BreakdownChart.tsx",
-    description: "비용/수행율을 항목별로 분해해 비교합니다.",
+    description: "비용 및 수행률 다각도 상세 분석",
     api: "GET /api/overview",
     items: [
       {
@@ -135,7 +135,7 @@ const OVERVIEW_DOCS = [
     id: "user-table",
     title: "UserTable (사용자 디렉토리)",
     component: "UserTable.tsx",
-    description: "사용자별 활동/루틴/비용 요약 테이블입니다.",
+    description: "개별 사용자 활동·루틴·비용 요약",
     api: "GET /api/users",
     items: [
       {
@@ -170,7 +170,7 @@ const OVERVIEW_DOCS = [
     id: "date-filter",
     title: "DateFilter (기간 필터)",
     component: "DateFilter.tsx",
-    description: "전체 데이터의 기간 범위를 제어합니다.",
+    description: "데이터 조회 기간 범위 설정",
     api: "모든 API",
     items: [
       {
@@ -187,7 +187,7 @@ const USER360_DOCS = [
     id: "user-summary",
     title: "User Summary (요약 탭)",
     component: "SummaryTab",
-    description: "프로필과 건강 요약, 데이터 보유 현황을 제공합니다.",
+    description: "프로필, 건강 데이터, 보유 현황 요약",
     api: "GET /api/user360/:userId",
     tables: [
       "user_profiles",
@@ -217,7 +217,7 @@ const USER360_DOCS = [
     id: "user-routine",
     title: "Routine (루틴 탭)",
     component: "RoutineTab",
-    description: "주간 플랜과 일별 수행 추이를 분석합니다.",
+    description: "주간 플랜 및 일별 수행 현황 분석",
     api: "GET /api/user360/:userId",
     tables: [
       "weekly_routine_plan",
@@ -246,7 +246,7 @@ const USER360_DOCS = [
     id: "user-communication",
     title: "Communication (커뮤니케이션 탭)",
     component: "CommunicationTab",
-    description: "발송 메시지와 채팅 스레드 요약을 제공합니다.",
+    description: "메시지 발송 이력 및 채팅 스레드 요약",
     api: "GET /api/user360/:userId",
     tables: ["send_messages", "chat_threads", "chat_threads_turns"],
     details: [
@@ -271,7 +271,7 @@ const USER360_DOCS = [
     id: "user-operations",
     title: "Operations (운영/비용 탭)",
     component: "OperationsTab",
-    description: "LLM 사용량과 실패 로그를 확인합니다.",
+    description: "LLM 사용량 및 시스템 처리/실패 로그",
     api: "GET /api/user360/:userId",
     tables: ["llm_usage", "processing_jobs", "user_state_validation_logs"],
     details: [
@@ -342,7 +342,7 @@ export default function ComponentGuide() {
   const docs = activeTab === "overview" ? OVERVIEW_DOCS : USER360_DOCS;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className={cn("min-h-screen bg-background text-foreground")}>
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center justify-between">
           <div className="flex items-center gap-3">

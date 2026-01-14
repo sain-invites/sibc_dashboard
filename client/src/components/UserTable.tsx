@@ -251,8 +251,8 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
                     className="text-center text-muted-foreground py-8"
                   >
                     {searchQuery
-                      ? "검색 결과가 없습니다"
-                      : "사용자 데이터가 없습니다"}
+                      ? "조건에 맞는 검색 결과가 없습니다."
+                      : "표시할 사용자 데이터가 존재하지 않습니다."}
                   </TableCell>
                 </TableRow>
               ) : (

@@ -323,8 +323,8 @@ export default function Home() {
   const generatedAtText = overview?.meta?.generatedAt
     ? formatDateTimeKST(overview.meta.generatedAt, true)
     : "-";
-  const generatedAtTime =
-    generatedAtText === "-" ? "-" : (generatedAtText.split(" ")[1] ?? "-");
+  const [generatedAtDate, generatedAtTime] =
+    generatedAtText === "-" ? ["-", "-"] : generatedAtText.split(" ");
 
   if (loading) {
     return (
@@ -535,10 +535,14 @@ export default function Home() {
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center gap-4">
               <span>데이터 소스: invites_loop (PostgreSQL)</span>
+              <span className="hidden sm:inline">|</span>
               <span>시간대: Asia/Seoul</span>
+              <span className="hidden sm:inline">|</span>
+              <span>화폐 단위: USD</span>
             </div>
             <div className="flex items-center gap-2">
-              <span>집계 시각: {generatedAtTime}</span>
+              <span>데이터 기준: {generatedAtDate}</span>
+              <span className="hidden sm:inline">{generatedAtTime}</span>
             </div>
           </div>
         </footer>
