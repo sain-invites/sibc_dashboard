@@ -10,6 +10,7 @@ import overviewRouter from "./routes/overview.js";
 import usersRouter from "./routes/users.js";
 import user360Router from "./routes/user360.js";
 import { testConnection, closePool } from "./db.js";
+import { logError, logInfo, requestLogger } from "./lib/logger.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,6 +20,7 @@ async function startServer() {
   const server = createServer(app);
 
   app.use(express.json());
+  app.use(requestLogger());
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -66,11 +68,17 @@ async function startServer() {
   app.use(
     (
       err: Error,
-      _req: express.Request,
+      req: express.Request,
       res: express.Response,
       _next: express.NextFunction,
     ) => {
-      console.error("Unhandled error:", err);
+      logError("request.error", {
+        requestId: res.locals.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        error: err.message,
+        stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+      });
       res.status(500).json({
         error: "Internal server error",
         message:
@@ -82,18 +90,20 @@ async function startServer() {
   const port = process.env.PORT || 3001;
 
   server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+    logInfo("server.started", { port });
   });
 
   // Graceful shutdown
   process.on("SIGTERM", async () => {
-    console.log("SIGTERM received, closing connections...");
+    logInfo("server.shutdown", { reason: "SIGTERM" });
     await closePool();
     server.close(() => {
-      console.log("Server closed");
+      logInfo("server.closed");
       process.exit(0);
     });
   });
 }
 
-startServer().catch(console.error);
+startServer().catch((error) => {
+  logError("server.start_failed", { error: (error as Error).message });
+});
