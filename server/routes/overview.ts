@@ -12,63 +12,14 @@
 import { Router, Request, Response } from "express";
 import { queryMany, queryOne } from "../db.js";
 import { DateParamSchema } from "../lib/validators.js";
+import type {
+  BreakdownItem,
+  KPI,
+  OverviewResponse,
+  TrendPoint,
+} from "../../shared/apiTypes.js";
 
 const router = Router();
-
-// Type definitions
-
-interface KPI {
-  id: string;
-  title: string;
-  value: number;
-  formattedValue: string;
-  unit: string;
-  status: "success" | "warning" | "danger";
-  trend: number;
-  trendDirection: "up" | "down" | "flat";
-  description: string;
-}
-
-interface TrendPoint {
-  date: string;
-  value: number;
-}
-
-interface BreakdownItem {
-  name: string;
-  value: number;
-  percentage?: number;
-  completed?: number;
-  total?: number;
-}
-
-interface OverviewResponse {
-  kpis: KPI[];
-  trends: {
-    newUsers: TrendPoint[];
-    returningUsers: TrendPoint[];
-    dau: TrendPoint[];
-    dailyEvents: TrendPoint[];
-    avgEventsPerUser: TrendPoint[];
-    routineCompleted: TrendPoint[];
-    routineCompletionRate: TrendPoint[];
-    llmErrorRate: TrendPoint[];
-    llmCostPerCall: TrendPoint[];
-  };
-  breakdown: {
-    llmCostByType: BreakdownItem[];
-    llmCostByModel: BreakdownItem[];
-    llmErrorTop10: BreakdownItem[];
-    completionByDomain: BreakdownItem[];
-    completionByPriority: BreakdownItem[];
-    completionByPeriod: BreakdownItem[];
-  };
-  meta: {
-    startDate: string;
-    endDate: string;
-    generatedAt: string;
-  };
-}
 
 // SQL queries (review changes)
 // ==========================

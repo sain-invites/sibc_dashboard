@@ -18,6 +18,7 @@ import {
   SortParamsSchema,
   UserIdSchema,
 } from "../lib/validators.js";
+import type { UserDirectoryResponse } from "../../shared/apiTypes.js";
 
 const router = Router();
 
@@ -54,40 +55,6 @@ interface UserRow {
   created_routines: number;
   llm_cost: string | number;
   last_activity: Date | string | null;
-}
-
-// interface UserRow {
-//   user_id: string;
-//   user_name: string;
-//   event_count: number;
-//   completed_routines: number;
-//   total_routines: number;
-//   llm_cost: number;
-//   last_activity: Date | null;
-// }
-
-interface UserDirectoryResponse {
-  users: Array<{
-    userId: string;
-    userName: string;
-    eventCount: number;
-    completedRoutines: number;
-    totalRoutines: number;
-    createdRoutines: number;
-    completionRate: number;
-    llmCost: number;
-    lastActivity: string | null;
-  }>;
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-  meta: {
-    startDate: string;
-    endDate: string;
-  };
 }
 
 // ============================================
@@ -152,41 +119,6 @@ const SQL = {
     WHERE ($1 = '' OR user_name ILIKE $1 OR user_id::text ILIKE $1)
   `,
 };
-
-// const SQL = {
-//   // 사용자 목록 (리뷰 반영: COUNT(uel.seq), ymd 기반, ts 컬럼)
-//   userList: `
-//     SELECT
-//       up.user_id,
-//       up.user_name,
-//       COUNT(uel.seq)::int AS event_count,
-//       SUM(CASE WHEN dra.completed_at IS NOT NULL THEN 1 ELSE 0 END)::int AS completed_routines,
-//       COUNT(dra.activity_row_id)::int AS total_routines,
-//       COALESCE(SUM(lu.cost_usd), 0)::numeric AS llm_cost,
-//       MAX(uel.created_at)::timestamptz AS last_activity
-//     FROM user_profiles up
-//     LEFT JOIN user_event_log uel
-//       ON up.user_id::text = uel.user_id::text
-//       AND uel.created_at::date BETWEEN $1::date AND $2::date
-//     LEFT JOIN daily_routine_activities dra
-//       ON up.user_id::text = dra.user_id::text
-//       AND to_date(dra.ymd::text, 'YYYYMMDD') BETWEEN $1::date AND $2::date
-//     LEFT JOIN llm_usage lu
-//       ON up.user_id::text = lu.user_id::text
-//       AND (lu.ts AT TIME ZONE 'Asia/Seoul')::date BETWEEN $1::date AND $2::date
-//     WHERE ($3 = '' OR up.user_name ILIKE $3 OR up.user_id::text ILIKE $3)
-//     GROUP BY up.user_id, up.user_name
-//     ORDER BY last_activity DESC NULLS LAST
-//     LIMIT $4 OFFSET $5
-//   `,
-
-//   // 총 사용자 수 (검색 조건 적용)
-//   userCount: `
-//     SELECT COUNT(*)::int as count
-//     FROM user_profiles
-//     WHERE ($1 = '' OR user_name ILIKE $1 OR user_id::text ILIKE $1)
-//   `,
-// };
 
 const SORT_COLUMNS = {
   userName: "NULLIF(TRIM(up.user_name), '') COLLATE \"C\"",

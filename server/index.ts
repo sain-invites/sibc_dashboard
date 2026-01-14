@@ -33,10 +33,6 @@ async function startServer() {
 
   app.use("/api/", limiter);
 
-  app.use("/api/overview", overviewRouter);
-  app.use("/api/users", usersRouter);
-  app.use("/api/user360", user360Router);
-
   // API 라우트 마운트
   app.use("/api/overview", overviewRouter);
   app.use("/api/users", usersRouter);
