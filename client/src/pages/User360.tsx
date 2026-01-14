@@ -262,14 +262,14 @@ function SummaryTab({ data }: { data: User360Data }) {
               <div
                 key={item.label}
                 className={cn(
-                  "flex items-center gap-2 p-3 rounded-lg border",
+                  "flex items-center gap-2 p-3 rounded-lg border transition-colors",
                   item.has
-                    ? "bg-[#238636]/10 border-[#238636]/30"
-                    : "bg-muted/30 border-border",
+                    ? "bg-green-500/10 border-green-500/30 text-foreground"
+                    : "bg-muted/30 border-border text-muted-foreground",
                 )}
               >
                 {item.has ? (
-                  <Check className="w-4 h-4 text-[#3FB950]" />
+                  <Check className="w-4 h-4 text-green-500" />
                 ) : (
                   <X className="w-4 h-4 text-muted-foreground" />
                 )}
@@ -657,8 +657,16 @@ function CommunicationTab({ data }: { data: User360Data }) {
                   return (
                     <div
                       key={msg.id}
-                      className="cursor-pointer p-3 bg-muted/20 rounded-lg border border-border"
+                      className="cursor-pointer p-3 bg-muted/20 rounded-lg border border-border hover:bg-muted/30 transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                       onClick={() => setSelectedMessage(msg)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setSelectedMessage(msg);
+                        }
+                      }}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-sm truncate">
@@ -724,8 +732,16 @@ function CommunicationTab({ data }: { data: User360Data }) {
                 {data.communication.chatThreads.map((thread) => (
                   <div
                     key={thread.threadId}
-                    className="cursor-pointer p-3 bg-muted/20 rounded-lg border border-border"
+                    className="cursor-pointer p-3 bg-muted/20 rounded-lg border border-border hover:bg-muted/30 transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                     onClick={() => setSelectedThread(thread)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setSelectedThread(thread);
+                      }
+                    }}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <Badge variant="outline" className="text-xs">

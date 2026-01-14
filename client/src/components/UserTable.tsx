@@ -313,14 +313,14 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
                         <Badge
                           variant="outline"
                           className={cn(
-                            "text-xs",
+                            "text-xs font-medium",
                             completionPct >= 70 &&
-                              "border-[#3FB950] text-[#3FB950]",
+                              "border-green-500 text-green-500 bg-green-500/5",
                             completionPct >= 30 &&
                               completionPct < 70 &&
-                              "border-[#D29922] text-[#D29922]",
+                              "border-yellow-500 text-yellow-500 bg-yellow-500/5",
                             completionPct < 30 &&
-                              "border-[#F85149] text-[#F85149]",
+                              "border-red-500 text-red-500 bg-red-500/5",
                           )}
                         >
                           {completionText}

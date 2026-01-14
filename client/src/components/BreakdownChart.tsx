@@ -273,10 +273,46 @@ export function BreakdownChart({ data, height = 280 }: BreakdownChartProps) {
           <span className="text-xs text-muted-foreground">{summaryText}</span>
         </div>
         <div
-          className="panel-body flex items-center justify-center"
+          className="panel-body flex flex-col items-center justify-center space-y-3"
           style={{ height }}
         >
-          <p className="text-sm text-muted-foreground">데이터가 없습니다</p>
+          <div className="w-10 h-10 rounded-full bg-muted/30 flex items-center justify-center">
+            <svg
+              className="w-5 h-5 text-muted-foreground/50"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                x1="12"
+                x2="12"
+                y1="20"
+                y2="10"
+                strokeLinecap="round"
+                strokeWidth="2"
+              />
+              <line
+                x1="18"
+                x2="18"
+                y1="20"
+                y2="4"
+                strokeLinecap="round"
+                strokeWidth="2"
+              />
+              <line
+                x1="6"
+                x2="6"
+                y1="20"
+                y2="16"
+                strokeLinecap="round"
+                strokeWidth="2"
+              />
+            </svg>
+          </div>
+          <p className="text-sm text-muted-foreground font-medium">
+            데이터가 없습니다
+          </p>
         </div>
       </div>
     );

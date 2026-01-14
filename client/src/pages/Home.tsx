@@ -385,14 +385,12 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="/guide">
-              <button
-                type="button"
-                className="hidden sm:inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"
-              >
-                <Book className="w-4 h-4" />
-                컴포넌트 가이드
-              </button>
+            <Link
+              href="/guide"
+              className="hidden sm:inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors py-1.5 px-3 rounded-md hover:bg-muted"
+            >
+              <Book className="w-4 h-4" />
+              컴포넌트 가이드
             </Link>
             <DateFilter
               startDate={dateRange.start}
