@@ -14,6 +14,7 @@ Invites Loop 서비스의 운영 지표와 사용자 활동을 한눈에 파악�
 - 사용자 디렉토리(검색, 페이지네이션, 활동 지표)
 - User 360 상세 뷰(프로필, 루틴, 커뮤니케이션, 운영 지표)
 - 전역 날짜 필터링
+- 컴포넌트 가이드(`/guide`)에서 데이터 출처/계산식 확인
 
 ## 기술 스택
 
@@ -28,7 +29,7 @@ Invites Loop 서비스의 운영 지표와 사용자 활동을 한눈에 파악�
 ├── client/                # Vite 루트 + React UI
 │   └── src/
 │       ├── components/    # KPI, 차트, 테이블 등 UI
-│       ├── pages/         # Home, User360, NotFound
+│       ├── pages/         # Home, User360, ComponentGuide, NotFound
 │       └── lib/           # 포맷터/유틸
 ├── server/                # Express API
 │   ├── routes/            # Overview, Users, User360
@@ -83,7 +84,7 @@ DB_SSL=true
 
 ## 컴포넌트 데이터 정의
 
-이 대시보드는 `invites_loop`의 실데이터를 집계하여 시각화합니다. 아래 표는 각 컴포넌트가 어떤 테이블/컬럼을 사용하고 어떤 계산식으로 표현되는지 요약한 것입니다.
+이 대시보드는 `invites_loop`의 실데이터를 집계하여 시각화합니다. 아래 표는 각 컴포넌트가 어떤 테이블/컬럼을 사용하고 어떤 계산식으로 표현되는지 요약한 것입니다. (UI에서는 `/guide`에서 동일한 내용을 확인할 수 있습니다.)
 
 ### Service Overview
 
