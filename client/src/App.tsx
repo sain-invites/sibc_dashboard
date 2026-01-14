@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import User360 from "./pages/User360";
+import ComponentGuide from "./pages/ComponentGuide";
 
 /**
  * Service Overview Dashboard
@@ -19,6 +20,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path="/user/:userId" component={User360} />
       <Route path="/user" component={User360} />
+      <Route path="/guide" component={ComponentGuide} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -31,13 +33,13 @@ function App() {
       {/* Command Center는 다크 테마가 기본 */}
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
-          <Toaster 
+          <Toaster
             position="top-right"
             toastOptions={{
               style: {
-                background: '#161B22',
-                border: '1px solid #30363D',
-                color: '#C9D1D9',
+                background: "#161B22",
+                border: "1px solid #30363D",
+                color: "#C9D1D9",
               },
             }}
           />

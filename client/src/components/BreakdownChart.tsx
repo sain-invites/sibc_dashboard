@@ -200,7 +200,10 @@ function TableView({ data }: { data: BreakdownChartData }) {
   return (
     <div className="overflow-auto max-h-[280px]">
       <table className="w-full text-sm">
-        <thead className="sticky top-0 bg-card">
+        <caption className="sr-only">
+          {data.title} 상세 데이터 테이블. {data.description || ""}
+        </caption>
+        <thead className="sticky top-0 bg-muted/40 backdrop-blur-sm">
           <tr className="border-b border-border">
             <th className="text-left py-2 px-2 text-muted-foreground font-medium">
               #
@@ -267,23 +270,65 @@ export function BreakdownChart({ data, height = 280 }: BreakdownChartProps) {
 
   if (data.data.length === 0) {
     return (
-      <div className="panel h-full">
+      <div className="panel h-full" aria-describedby={`desc-${data.id}`}>
+        <div className="sr-only" id={`desc-${data.id}`}>
+          {data.title} 차트입니다. {summaryText}. {data.description || ""}
+        </div>
         <div className="panel-header">
           <h3 className="text-sm font-medium text-foreground">{data.title}</h3>
           <span className="text-xs text-muted-foreground">{summaryText}</span>
         </div>
         <div
-          className="panel-body flex items-center justify-center"
+          className="panel-body flex flex-col items-center justify-center space-y-3"
           style={{ height }}
         >
-          <p className="text-sm text-muted-foreground">데이터가 없습니다</p>
+          <div className="w-10 h-10 rounded-full bg-muted/30 flex items-center justify-center">
+            <svg
+              className="w-5 h-5 text-muted-foreground/50"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                x1="12"
+                x2="12"
+                y1="20"
+                y2="10"
+                strokeLinecap="round"
+                strokeWidth="2"
+              />
+              <line
+                x1="18"
+                x2="18"
+                y1="20"
+                y2="4"
+                strokeLinecap="round"
+                strokeWidth="2"
+              />
+              <line
+                x1="6"
+                x2="6"
+                y1="20"
+                y2="16"
+                strokeLinecap="round"
+                strokeWidth="2"
+              />
+            </svg>
+          </div>
+          <p className="text-sm text-muted-foreground font-medium">
+            데이터가 없습니다
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="panel h-full">
+    <div className="panel h-full" aria-describedby={`desc-${data.id}`}>
+      <div className="sr-only" id={`desc-${data.id}`}>
+        {data.title} 차트입니다. {summaryText}. {data.description || ""}
+      </div>
       <div className="panel-header">
         <h3 className="text-sm font-medium text-foreground">{data.title}</h3>
         <span className="text-xs text-muted-foreground">{summaryText}</span>

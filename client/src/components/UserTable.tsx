@@ -130,7 +130,7 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
   ) => (
     <TableHead
       className={cn(
-        "bg-[#0D1117] text-muted-foreground",
+        "bg-muted/50 text-muted-foreground",
         align === "right" && "text-right",
       )}
     >
@@ -185,16 +185,16 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
             setSearchQuery(e.target.value);
             setCurrentPage(1);
           }}
-          className="pl-9 bg-[#161B22] border-[#30363D]"
+          className="pl-9 bg-background border-border"
         />
       </div>
 
-      <div className="rounded-md border border-[#30363D] overflow-hidden">
-        <div className="bg-[#0D1117]">
+      <div className="rounded-md border border-border overflow-hidden">
+        <div className="bg-muted/50">
           <Table className="table-fixed">
             {renderColGroup()}
             <TableHeader>
-              <TableRow className="border-[#30363D] hover:bg-transparent">
+              <TableRow className="border-border hover:bg-transparent">
                 {renderHeader("사용자", "userName", "left")}
                 {renderHeader(
                   "이벤트",
@@ -251,8 +251,8 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
                     className="text-center text-muted-foreground py-8"
                   >
                     {searchQuery
-                      ? "검색 결과가 없습니다"
-                      : "사용자 데이터가 없습니다"}
+                      ? "조건에 맞는 검색 결과가 없습니다."
+                      : "표시할 사용자 데이터가 존재하지 않습니다."}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -277,7 +277,7 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
                   return (
                     <TableRow
                       key={row.userId}
-                      className="border-[#30363D] cursor-pointer hover:bg-[#161B22]"
+                      className="border-border cursor-pointer hover:bg-muted/50"
                       onClick={() => setLocation(`/user/${row.userId}`)}
                     >
                       <TableCell>
@@ -313,14 +313,14 @@ export function UserTable({ startDate, endDate }: UserTableProps) {
                         <Badge
                           variant="outline"
                           className={cn(
-                            "text-xs",
+                            "text-xs font-medium",
                             completionPct >= 70 &&
-                              "border-[#3FB950] text-[#3FB950]",
+                              "border-green-500 text-green-500 bg-green-500/5",
                             completionPct >= 30 &&
                               completionPct < 70 &&
-                              "border-[#D29922] text-[#D29922]",
+                              "border-yellow-500 text-yellow-500 bg-yellow-500/5",
                             completionPct < 30 &&
-                              "border-[#F85149] text-[#F85149]",
+                              "border-red-500 text-red-500 bg-red-500/5",
                           )}
                         >
                           {completionText}

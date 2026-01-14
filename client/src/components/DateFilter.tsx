@@ -128,16 +128,20 @@ export function DateFilter({
               <p className="text-xs text-muted-foreground mb-2 px-2">
                 빠른 선택
               </p>
-              {presets.map((preset) => (
-                <Button
-                  key={preset.label}
-                  variant="ghost"
-                  size="sm"
-                  className="w-full justify-start text-sm hover:bg-muted"
-                  onClick={() => handlePresetClick(preset)}
-                >
-                  {preset.label}
-                </Button>
+              {presets.map((preset, index) => (
+                <div key={preset.label}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start text-sm hover:bg-muted"
+                    onClick={() => handlePresetClick(preset)}
+                  >
+                    {preset.label}
+                  </Button>
+                  {index === 3 && (
+                    <div className="my-1 border-b border-border" />
+                  )}
+                </div>
               ))}
             </div>
 

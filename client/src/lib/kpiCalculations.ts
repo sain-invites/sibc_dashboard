@@ -579,6 +579,7 @@ export interface BreakdownChartData {
     total?: number;
   }[];
   type: "bar" | "pie" | "table";
+  description?: string;
 }
 
 export function calculateBreakdownCharts(

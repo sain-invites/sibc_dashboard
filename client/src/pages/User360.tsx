@@ -42,6 +42,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { DateFilter } from "@/components/DateFilter";
 import {
   Dialog,
@@ -90,6 +95,7 @@ import {
   ChevronDown,
   Database,
   RefreshCw,
+  Book,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -261,14 +267,14 @@ function SummaryTab({ data }: { data: User360Data }) {
               <div
                 key={item.label}
                 className={cn(
-                  "flex items-center gap-2 p-3 rounded-lg border",
+                  "flex items-center gap-2 p-3 rounded-lg border transition-colors",
                   item.has
-                    ? "bg-[#238636]/10 border-[#238636]/30"
-                    : "bg-muted/30 border-border",
+                    ? "bg-green-500/10 border-green-500/30 text-foreground"
+                    : "bg-muted/30 border-border text-muted-foreground",
                 )}
               >
                 {item.has ? (
-                  <Check className="w-4 h-4 text-[#3FB950]" />
+                  <Check className="w-4 h-4 text-green-500" />
                 ) : (
                   <X className="w-4 h-4 text-muted-foreground" />
                 )}
@@ -408,25 +414,25 @@ function RoutineTab({ data }: { data: User360Data }) {
           {data.routine.currentWeekPlan ? (
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <div className="text-center p-3 bg-muted/30 rounded-lg border border-transparent hover:border-border transition-all">
                   <p className="text-2xl font-bold text-[#58A6FF]">
                     {totalGoals}
                   </p>
                   <p className="text-xs text-muted-foreground">총 목표</p>
                 </div>
-                <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <div className="text-center p-3 bg-muted/30 rounded-lg border border-transparent hover:border-border transition-all">
                   <p className="text-2xl font-bold text-[#3FB950]">
                     {completedGoals}
                   </p>
                   <p className="text-xs text-muted-foreground">수행</p>
                 </div>
-                <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <div className="text-center p-3 bg-muted/30 rounded-lg border border-transparent hover:border-border transition-all">
                   <p className="text-2xl font-bold text-[#D29922]">
                     {inProgressGoals}
                   </p>
                   <p className="text-xs text-muted-foreground">진행 중</p>
                 </div>
-                <div className="text-center p-3 bg-muted/30 rounded-lg">
+                <div className="text-center p-3 bg-muted/30 rounded-lg border border-transparent hover:border-border transition-all">
                   <p className="text-2xl font-bold text-[#A371F7]">
                     {overallCompletionRateText}
                   </p>
@@ -481,7 +487,9 @@ function RoutineTab({ data }: { data: User360Data }) {
 
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg">최근 14일 수행율 추이</CardTitle>
+          <CardTitle className="text-lg">
+            일별 수행율 추이 (선택 기간)
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {completionRateData.length > 0 ? (
@@ -643,7 +651,7 @@ function CommunicationTab({ data }: { data: User360Data }) {
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">최근 발송 메시지</CardTitle>
-          <CardDescription>최근 10건</CardDescription>
+          <CardDescription>최근 10건 (선택 기간 내)</CardDescription>
         </CardHeader>
         <CardContent>
           {data.communication.recentMessages.length > 0 ? (
@@ -656,8 +664,16 @@ function CommunicationTab({ data }: { data: User360Data }) {
                   return (
                     <div
                       key={msg.id}
-                      className="cursor-pointer p-3 bg-muted/20 rounded-lg border border-border"
+                      className="cursor-pointer p-3 bg-muted/20 rounded-lg border border-border hover:bg-muted/30 transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                       onClick={() => setSelectedMessage(msg)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setSelectedMessage(msg);
+                        }
+                      }}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-sm truncate">
@@ -705,7 +721,7 @@ function CommunicationTab({ data }: { data: User360Data }) {
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <MessageSquare className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p>발송된 메시지가 없습니다</p>
+              <p>최근 발송된 메시지 내역이 없습니다</p>
             </div>
           )}
         </CardContent>
@@ -714,7 +730,7 @@ function CommunicationTab({ data }: { data: User360Data }) {
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">최근 채팅 스레드</CardTitle>
-          <CardDescription>최근 10건</CardDescription>
+          <CardDescription>최근 10건 (선택 기간 내)</CardDescription>
         </CardHeader>
         <CardContent>
           {data.communication.chatThreads.length > 0 ? (
@@ -723,8 +739,16 @@ function CommunicationTab({ data }: { data: User360Data }) {
                 {data.communication.chatThreads.map((thread) => (
                   <div
                     key={thread.threadId}
-                    className="cursor-pointer p-3 bg-muted/20 rounded-lg border border-border"
+                    className="cursor-pointer p-3 bg-muted/20 rounded-lg border border-border hover:bg-muted/30 transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                     onClick={() => setSelectedThread(thread)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setSelectedThread(thread);
+                      }
+                    }}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <Badge variant="outline" className="text-xs">
@@ -778,7 +802,7 @@ function CommunicationTab({ data }: { data: User360Data }) {
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <MessageSquare className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p>채팅 기록이 없습니다</p>
+              <p>진행된 대화 스레드가 없습니다</p>
             </div>
           )}
         </CardContent>
@@ -1066,7 +1090,7 @@ function OperationsTab({ data }: { data: User360Data }) {
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">최근 처리 실패</CardTitle>
-          <CardDescription>최근 10건</CardDescription>
+          <CardDescription>최근 10건 (선택 기간 내)</CardDescription>
         </CardHeader>
         <CardContent>
           {data.operations.recentFailures.length > 0 ? (
@@ -1105,7 +1129,9 @@ function OperationsTab({ data }: { data: User360Data }) {
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <Check className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p>최근 실패한 작업이 없습니다. 시스템이 안정적입니다.</p>
+              <p>
+                최근 실패한 작업이 없습니다. 시스템이 안정적으로 운영 중입니다.
+              </p>
             </div>
           )}
         </CardContent>
@@ -1298,26 +1324,47 @@ export default function User360() {
               <h1 className="text-base font-semibold text-foreground">
                 User 360
               </h1>
-              <p className="text-xs text-muted-foreground">User Drilldown</p>
+              <p className="text-xs text-muted-foreground">
+                Individual User Analysis
+              </p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <DateFilter
-              startDate={dateRange.start}
-              endDate={dateRange.end}
-              onDateChange={(start, end) => setDateRange({ start, end })}
-              onRefresh={() => {
-                refetch();
-                refetchUsers();
-              }}
-              lastUpdated={lastUpdated}
-            />
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-card border border-border">
+            <Link href="/guide">
+              <Button variant="ghost" size="sm" className="gap-2 text-xs">
+                <Book className="w-4 h-4" />
+                컴포넌트 가이드
+              </Button>
+            </Link>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div>
+                  <DateFilter
+                    startDate={dateRange.start}
+                    endDate={dateRange.end}
+                    onDateChange={(start, end) => setDateRange({ start, end })}
+                    onRefresh={() => {
+                      refetch();
+                      refetchUsers();
+                    }}
+                    lastUpdated={lastUpdated}
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>모든 탭의 지표는 선택된 기간을 기준으로 필터링됩니다.</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <div
+              className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-card border border-border hover:border-primary/20 transition-colors"
+              title="System Health Status"
+            >
               <div
                 className={`w-2 h-2 rounded-full ${
                   health.status === "ok"
-                    ? "bg-[#3FB950] pulse-live"
+                    ? "bg-[#3FB950] ring-4 ring-[#3FB950]/20"
                     : "bg-[#F85149]"
                 }`}
               />

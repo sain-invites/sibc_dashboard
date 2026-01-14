@@ -5,6 +5,7 @@
  */
 
 import { useState, useMemo, useEffect } from "react";
+import { Link } from "wouter";
 import { useHealthCheck, useOverviewAPI } from "@/hooks/useAPI";
 import type {
   KPIData,
@@ -23,7 +24,11 @@ import {
   Users,
   DollarSign,
   CheckCircle,
+  Book,
+  TrendingUp,
+  TrendingDown,
 } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import {
   formatDateTimeKST,
@@ -258,6 +263,7 @@ export default function Home() {
           percentage: d.percentage,
         })),
         type: "bar",
+        description: "API 호출 유형별 비용 합계 상위 항목",
       },
       {
         id: "cost_by_model",
@@ -268,6 +274,7 @@ export default function Home() {
           percentage: d.percentage,
         })),
         type: "bar",
+        description: "사용된 AI 모델별 비용 합계",
       },
       {
         id: "llm_error_top10",
@@ -277,6 +284,7 @@ export default function Home() {
           value: d.value,
         })),
         type: "table",
+        description: "가장 빈번하게 발생한 LLM 및 Job 에러 메시지",
       },
       {
         id: "completion_by_domain",
@@ -288,6 +296,7 @@ export default function Home() {
           total: d.total,
         })),
         type: "bar",
+        description: "루틴 도메인(건강, 학습 등)별 수행 완료 비율",
       },
       {
         id: "completion_by_priority",
@@ -299,6 +308,7 @@ export default function Home() {
           total: d.total,
         })),
         type: "bar",
+        description: "루틴 우선순위(High, Medium, Low)별 수행 완료 비율",
       },
       {
         id: "completion_by_period",
@@ -310,6 +320,7 @@ export default function Home() {
           total: d.total,
         })),
         type: "bar",
+        description: "하루 시간대(아침, 점심, 저녁 등)별 루틴 수행 완료 비율",
       },
     ];
   }, [overview]);
@@ -320,8 +331,8 @@ export default function Home() {
   const generatedAtText = overview?.meta?.generatedAt
     ? formatDateTimeKST(overview.meta.generatedAt, true)
     : "-";
-  const generatedAtTime =
-    generatedAtText === "-" ? "-" : (generatedAtText.split(" ")[1] ?? "-");
+  const [generatedAtDate, generatedAtTime] =
+    generatedAtText === "-" ? ["-", "-"] : generatedAtText.split(" ");
 
   if (loading) {
     return (
@@ -380,6 +391,13 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-4">
+            <Link
+              href="/guide"
+              className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors py-1.5 px-3 rounded-md hover:bg-muted"
+            >
+              <Book className="w-4 h-4" />
+              <span className="hidden sm:inline">컴포넌트 가이드</span>
+            </Link>
             <DateFilter
               startDate={dateRange.start}
               endDate={dateRange.end}
@@ -388,11 +406,14 @@ export default function Home() {
               lastUpdated={lastUpdated}
             />
 
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-card border border-border">
+            <div
+              className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-card border border-border hover:border-primary/20 transition-colors"
+              title="System Health Status"
+            >
               <div
                 className={`w-2 h-2 rounded-full ${
                   health.status === "ok"
-                    ? "bg-[#3FB950] pulse-live"
+                    ? "bg-[#3FB950] ring-4 ring-[#3FB950]/20"
                     : "bg-[#F85149]"
                 }`}
               />
@@ -426,7 +447,7 @@ export default function Home() {
               <div
                 key={item.title}
                 className={cn(
-                  "p-4 rounded-xl border bg-card/50 backdrop-blur-sm relative overflow-hidden group transition-all hover:scale-[1.02]",
+                  "p-4 rounded-xl border bg-card/30 backdrop-blur-sm relative overflow-hidden group transition-all duration-200 hover:scale-[1.01] hover:bg-card/40",
                   item.border,
                 )}
               >
@@ -454,7 +475,7 @@ export default function Home() {
                     </div>
                     <span
                       className={cn(
-                        "text-xs font-medium px-1.5 py-0.5 rounded",
+                        "flex items-center gap-1 text-xs font-medium px-1.5 py-0.5 rounded",
                         item.trend > 0
                           ? "text-green-500 bg-green-500/10"
                           : item.trend < 0
@@ -462,6 +483,11 @@ export default function Home() {
                             : "text-muted-foreground bg-muted/10",
                       )}
                     >
+                      {item.trend > 0 ? (
+                        <TrendingUp className="w-3 h-3" />
+                      ) : item.trend < 0 ? (
+                        <TrendingDown className="w-3 h-3" />
+                      ) : null}
                       {item.trend > 0 ? "+" : ""}
                       {item.trend.toFixed(1)}%
                     </span>
@@ -523,10 +549,14 @@ export default function Home() {
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center gap-4">
               <span>데이터 소스: invites_loop (PostgreSQL)</span>
+              <span className="hidden sm:inline mx-2">·</span>
               <span>시간대: Asia/Seoul</span>
+              <span className="hidden sm:inline mx-2">·</span>
+              <span>화폐 단위: USD</span>
             </div>
             <div className="flex items-center gap-2">
-              <span>집계 시각: {generatedAtTime}</span>
+              <span>데이터 기준: {generatedAtDate}</span>
+              <span className="hidden sm:inline">{generatedAtTime}</span>
             </div>
           </div>
         </footer>

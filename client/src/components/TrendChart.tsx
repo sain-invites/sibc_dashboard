@@ -23,6 +23,8 @@ import {
   formatPercent,
 } from "@/lib/formatters";
 
+import { BarChart2 } from "lucide-react";
+
 interface TrendChartProps {
   data: TrendChartData;
   height?: number;
@@ -69,7 +71,7 @@ function CustomTooltip({
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="bg-popover border border-border rounded-md px-3 py-2 shadow-lg">
+    <div className="bg-popover/95 backdrop-blur-sm border border-border rounded-md px-3 py-2 shadow-xl">
       <p className="text-xs text-muted-foreground mb-1">{label}</p>
       <p className="text-sm font-medium text-foreground">
         {typeof payload[0].value === "number"
@@ -99,22 +101,33 @@ export function TrendChart({
   // 데이터가 없을 때
   if (chartData.length === 0) {
     return (
-      <div className="panel h-full">
+      <div className="panel h-full" aria-describedby={`desc-${data.id}`}>
+        <div className="sr-only" id={`desc-${data.id}`}>
+          {data.title} 차트입니다. {data.description || ""}
+        </div>
         <div className="panel-header">
           <h3 className="text-sm font-medium text-foreground">{data.title}</h3>
         </div>
         <div
-          className="panel-body flex items-center justify-center"
+          className="panel-body flex flex-col items-center justify-center gap-3"
           style={{ height }}
         >
-          <p className="text-sm text-muted-foreground">데이터가 없습니다</p>
+          <div className="p-3 rounded-full bg-muted/30">
+            <BarChart2 className="w-6 h-6 text-muted-foreground/50" />
+          </div>
+          <p className="text-sm text-muted-foreground font-medium">
+            데이터가 없습니다
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="panel h-full">
+    <div className="panel h-full" aria-describedby={`desc-${data.id}`}>
+      <div className="sr-only" id={`desc-${data.id}`}>
+        {data.title} 차트입니다. {data.description || ""}
+      </div>
       <div className="panel-header">
         <h3 className="text-sm font-medium text-foreground">{data.title}</h3>
       </div>
@@ -144,12 +157,12 @@ export function TrendChart({
               />
               <XAxis
                 dataKey="displayDate"
-                tick={{ fill: "#8B949E", fontSize: 10 }}
+                tick={{ fill: "#8B949E", fontSize: 11 }}
                 tickLine={false}
                 axisLine={{ stroke: "#30363D" }}
               />
               <YAxis
-                tick={{ fill: "#8B949E", fontSize: 10 }}
+                tick={{ fill: "#8B949E", fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
                 width={40}
@@ -189,12 +202,12 @@ export function TrendChart({
               />
               <XAxis
                 dataKey="displayDate"
-                tick={{ fill: "#8B949E", fontSize: 10 }}
+                tick={{ fill: "#8B949E", fontSize: 11 }}
                 tickLine={false}
                 axisLine={{ stroke: "#30363D" }}
               />
               <YAxis
-                tick={{ fill: "#8B949E", fontSize: 10 }}
+                tick={{ fill: "#8B949E", fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
                 width={40}
