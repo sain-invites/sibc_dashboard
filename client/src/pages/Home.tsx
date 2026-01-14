@@ -5,6 +5,7 @@
  */
 
 import { useState, useMemo, useEffect } from "react";
+import { Link } from "wouter";
 import { useHealthCheck, useOverviewAPI } from "@/hooks/useAPI";
 import type {
   KPIData,
@@ -23,7 +24,9 @@ import {
   Users,
   DollarSign,
   CheckCircle,
+  Book,
 } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import {
   formatDateTimeKST,
@@ -380,6 +383,15 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-4">
+            <Link href="/guide">
+              <button
+                type="button"
+                className="hidden sm:inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"
+              >
+                <Book className="w-4 h-4" />
+                컴포넌트 가이드
+              </button>
+            </Link>
             <DateFilter
               startDate={dateRange.start}
               endDate={dateRange.end}

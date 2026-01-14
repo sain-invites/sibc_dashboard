@@ -90,6 +90,7 @@ import {
   ChevronDown,
   Database,
   RefreshCw,
+  Book,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -1303,6 +1304,12 @@ export default function User360() {
           </div>
 
           <div className="flex items-center gap-4">
+            <Link href="/guide">
+              <Button variant="ghost" size="sm" className="gap-2 text-xs">
+                <Book className="w-4 h-4" />
+                컴포넌트 가이드
+              </Button>
+            </Link>
             <DateFilter
               startDate={dateRange.start}
               endDate={dateRange.end}
